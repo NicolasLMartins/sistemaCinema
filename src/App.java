@@ -9,20 +9,20 @@ public class App {
         
         System.out.println("Digite o nome do arquivo: ");
         String nomeArquivo = input.nextLine();
-
+        
         File arquivo = new File(nomeArquivo);
-
-        if(!arquivo.exists()){
+        
+        if (!arquivo.exists()) {
             System.out.println("Arquivo nao encontrado!");
             return;
         }
-
+        
         try {
             Scanner leitor = new Scanner(arquivo);
-            if (leitor.hasNextLine()){
+            if (leitor.hasNextLine()) {
                 leitor.nextLine(); // Pula cabeçalho
             }
-
+            
             while (leitor.hasNextLine()) {
                 String linha = leitor.nextLine();
                 String[] partes = linha.split(",");
@@ -31,19 +31,19 @@ public class App {
                     String idAssento = partes[0];
                     char sexo = partes[1].charAt(0);
                     int idade = Integer.parseInt(partes[2]);
-
+                    
                     int linhaIndex = idAssento.charAt(0) - 'A';
                     int colunaIndex = Integer.parseInt(idAssento.substring(1)) - 1;
-
+                    
                     mapaAssentos[linhaIndex][colunaIndex] = 'X';
                     sexoOcupantes[linhaIndex][colunaIndex] = sexo;
                     idadeOcupantes[linhaIndex][colunaIndex] = idade;
                 }
             }
-
+            
             leitor.close();
             System.out.println("Dados carregados!");
-            
+
         } catch (Exception e) {
             System.out.println("Erro ao ler arquivo!");
         }
@@ -51,6 +51,33 @@ public class App {
         System.out.println("Pressione ENTER para continuar...");
         input.nextLine();
     }
+    
+    public static void visualizarMapa(char[][] mapaAssentos) {
+        System.out.print("\033\143");
+
+        char currentLine;
+        int asciiLetter = 65;
+
+        System.out.println("====== MAPA DO CINEMA ======");
+        for (int i = 0; i < mapaAssentos.length + 1; i++) {
+            currentLine = i > 0 ? (char) asciiLetter++ : ' ';
+            System.out.print(currentLine);
+
+            for (int j = 0; j < mapaAssentos[0].length; j++) {
+                if (i == 0) {
+                    System.out.printf(" %02d", j + 1);
+                    continue;
+                }
+                
+                System.out.print(" " + mapaAssentos[i - 1][j] + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("Pressione ENTER para voltar ao menu...");
+        input.nextLine();
+    }
+
     public static void main(String[] args) {
 
         double valorIngresso = 0;
@@ -72,8 +99,8 @@ public class App {
         int[][] idadeOcupantes = new int[fileiras][assentos];
 
         // Inicializa todos assentos como livres
-        for (int i = 0; i < fileiras; i++){
-            for (int j = 0; j < assentos; j++){
+        for (int i = 0; i < fileiras; i++) {
+            for (int j = 0; j < assentos; j++) {
                 mapaAssentos[i][j] = '.';
                 sexoOcupantes[i][j] = ' ';
                 idadeOcupantes[i][j] = 0;
@@ -101,39 +128,37 @@ public class App {
             switch (opcao) {
                 case 1:
                     carregarDados(mapaAssentos, sexoOcupantes, idadeOcupantes);
-                    
+
                     break;
                 case 2:
-                    
+
                     break;
                 case 3:
-                    
+
                     break;
                 case 4:
-                    
+
                     break;
                 case 5:
-                    
+                    visualizarMapa(mapaAssentos);
                     break;
                 case 6:
-                    
+
                     break;
                 case 7:
-                    
+
                     break;
                 case 8:
-                    
+
                     break;
                 case 9:
-                    
+
                     break;
-                
+
                 default:
                     break;
             }
         } while (opcao != 9);
-
-
 
     }
 }
