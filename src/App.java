@@ -514,7 +514,10 @@ public class App {
                     salvarDados(mapaAssentos, sexoOcupantes, idadeOcupantes);
                     break;
                 case 8:
-
+                    System.out.println("====== INTEGRANTES ======");
+                    System.out.println("Nícolas Lisbôa Martins, Marks Cardoso, Henrique Joaquim");
+                    System.out.println("Pressione ENTER para voltar ao menu...");
+                    input.nextLine();
                     break;
                 case 9:
 
