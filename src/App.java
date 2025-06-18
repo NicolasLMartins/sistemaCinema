@@ -4,7 +4,8 @@ import java.util.Scanner;
 public class App {
     public static Scanner input = new Scanner(System.in);
 
-    public static void carregarDados(char[][] mapaAssentos, char[][] sexoOcupantes, int[][] idadeOcupantes) {
+    public static void carregarDados(char[][] mapaAssentos, char[][] sexoOcupantes, int[][] idadeOcupantes,
+            double[][] valorOcupantes, double valorIngresso) {
         System.out.print("\033\143");
 
         System.out.println("Digite o nome do arquivo: ");
@@ -37,8 +38,10 @@ public class App {
 
                     mapaAssentos[linhaIndex][colunaIndex] = 'X';
                     sexoOcupantes[linhaIndex][colunaIndex] = sexo;
-                    idadeOcupantes[linhaIndex][colunaIndex] = idade; 
-                    //TODO: valorOcupantes array integration
+                    idadeOcupantes[linhaIndex][colunaIndex] = idade;
+                    valorOcupantes[linhaIndex][colunaIndex] = (idade >= 0 && idade <= 17) || idade >= 60
+                            ? valorIngresso / 2
+                            : valorIngresso;
                 }
             }
 
@@ -54,7 +57,7 @@ public class App {
     }
 
     public static void consultarAssento(char[][] mapaAssentos, char[][] sexoOcupantes, int[][] idadeOcupantes,
-            double valorIngresso) {
+            double[][] valorOcupantes, double valorIngresso) {
         System.out.print("\033\143");
 
         System.out.println("===== CONSULTAR SITUAÇÃO DE UM ASSENTO =====");
@@ -94,19 +97,10 @@ public class App {
             System.out.println("O assento " + assento + " está RESERVADO.");
             char sexo = sexoOcupantes[linha][coluna];
             int idade = idadeOcupantes[linha][coluna];
-            double valorPago;
-
-            if (idade <= 12) { // TODO: valorOcupantes array integration
-                valorPago = valorIngresso * 0.5;
-            } else if (idade >= 60) {
-                valorPago = valorIngresso * 0.6;
-            } else {
-                valorPago = valorIngresso;
-            }
 
             System.out.println("Sexo do ocupante: " + sexo);
             System.out.println("Idade do ocupante: " + idade);
-            System.out.printf("Valor pago: R$ %.2f\n", valorPago);
+            System.out.printf("Valor pago: R$ %.2f\n", valorOcupantes[linha][coluna]);
         }
 
         System.out.println("Pressione ENTER para continuar...");
@@ -120,7 +114,7 @@ public class App {
         System.out.println("===== RESERVA DE N ASSENTOS =====");
         System.out.print("Informe o assento inicial (ex: C4): ");
         String assento = input.nextLine().toUpperCase();
-        
+
         if (assento.length() < 2) {
             System.out.println("Formato inválido!");
             System.out.println("Pressione ENTER para continuar...");
@@ -130,7 +124,7 @@ public class App {
 
         char letra = assento.charAt(0);
         int linha = letra - 'A';
-        
+
         int coluna;
         try {
             coluna = Integer.parseInt(assento.substring(1)) - 1;
@@ -140,27 +134,27 @@ public class App {
             input.nextLine();
             return;
         }
-        
+
         if (linha < 0 || linha >= mapaAssentos.length || coluna < 0 || coluna >= mapaAssentos[0].length) {
             System.out.println("Assento fora dos limites!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
             return;
         }
-        
+
         System.out.print("Informe a quantidade de assentos a reservar: ");
         int quantidade = input.nextInt();
         input.nextLine();
-        
+
         if (coluna + quantidade > mapaAssentos[0].length) {
             System.out.println("Não é possível liberar essa quantidade de assentos a partir do assento informado.");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
             return;
         }
-        
+
         int reservados = 0;
-        
+
         for (int i = coluna; i < coluna + quantidade; i++) {
             if (mapaAssentos[linha][i] == 'X') {
                 System.out.println("Sobreposição detectada, tente novamente com outros assentos...");
@@ -169,17 +163,17 @@ public class App {
                 return;
             }
         }
-        
+
         double valor = 0;
-        
+
         for (int j = coluna; j < coluna + quantidade; j++) {
             System.out.print("\033\143");
 
             System.out.println("===== RESERVA DE N ASSENTOS =====");
-    
+
             System.out.println("Qual o sexo da pessoa no assento " + letra + (j + 1) + " (F/M)?");
             char sexo = input.next().charAt(0);
-            
+
             if (sexo != 'F' && sexo != 'M') {
                 System.out.println("Entrada inválida.");
                 System.out.println("Pressione ENTER para continuar...");
@@ -187,15 +181,15 @@ public class App {
                 input.nextLine();
                 return;
             }
-            
+
             System.out.println("Qual a idade da pessoa no assento " + letra + (j + 1) + "?");
 
             int idade = input.nextInt();
-            
+
             mapaAssentos[linha][j] = 'X';
             sexoOcupantes[linha][j] = sexo;
             idadeOcupantes[linha][j] = idade;
-            valorOcupantes[linha][j] = ((idade >= 0 && idade <= 17) || idade >= 60) ? valorIngresso / 2 : valorIngresso;
+            valorOcupantes[linha][j] = (idade >= 0 && idade <= 17) || idade >= 60 ? valorIngresso / 2 : valorIngresso;
             valor += valorOcupantes[linha][j];
             reservados++;
         }
@@ -203,11 +197,12 @@ public class App {
         System.out.println("Total de assentos reservados: " + reservados);
         System.out.println("Total a pagar: R$ " + String.format("%.2f", valor));
         System.out.println("Pressione ENTER para continuar...");
-        input.nextLine(); //Limpa buffer
+        input.nextLine(); // Limpa buffer
         input.nextLine();
     }
 
-    public static void liberarAssentos(char[][] mapaAssentos, char[][] sexoOcupantes, int[][] idadeOcupantes) {
+    public static void liberarAssentos(char[][] mapaAssentos, char[][] sexoOcupantes, int[][] idadeOcupantes,
+            double[][] valorOcupantes) {
         System.out.print("\033\143");
 
         System.out.println("===== LIBERAR RESERVA DE N ASSENTOS =====");
@@ -259,6 +254,7 @@ public class App {
                 mapaAssentos[linha][j] = '.';
                 sexoOcupantes[linha][j] = ' ';
                 idadeOcupantes[linha][j] = 0;
+                valorOcupantes[linha][j] = 0.0d;
                 liberados++;
             }
         }
@@ -295,7 +291,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        // TODO: clear terminal screen
+        System.out.print("\033\143");
         double valorIngresso = 0;
         int fileiras = 0;
         int assentos = 0;
@@ -344,17 +340,17 @@ public class App {
 
             switch (opcao) {
                 case 1:
-                    carregarDados(mapaAssentos, sexoOcupantes, idadeOcupantes);
+                    carregarDados(mapaAssentos, sexoOcupantes, idadeOcupantes, valorOcupantes, valorIngresso);
 
                     break;
                 case 2:
-                    consultarAssento(mapaAssentos, sexoOcupantes, idadeOcupantes, valorIngresso);
+                    consultarAssento(mapaAssentos, sexoOcupantes, idadeOcupantes, valorOcupantes, valorIngresso);
                     break;
                 case 3:
                     reservarAssentos(mapaAssentos, sexoOcupantes, idadeOcupantes, valorOcupantes, valorIngresso);
                     break;
                 case 4:
-                    liberarAssentos(mapaAssentos, sexoOcupantes, idadeOcupantes);
+                    liberarAssentos(mapaAssentos, sexoOcupantes, idadeOcupantes, valorOcupantes);
 
                     break;
                 case 5:
