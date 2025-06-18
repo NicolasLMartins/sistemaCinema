@@ -52,6 +52,67 @@ public class App {
         input.nextLine();
     }
     
+    public static void liberarAssentos(char[][] mapaAssentos, char[][] sexoOcupantes, int[][] idadeOcupantes) {
+        System.out.print("\033\143");
+    
+        System.out.println("===== LIBERAR RESERVA DE N ASSENTOS =====");
+        System.out.print("Informe o assento inicial (ex: B3): ");
+        String assento = input.nextLine().toUpperCase();
+    
+        if (assento.length() < 2) {
+            System.out.println("Formato inválido!");
+            System.out.println("Pressione ENTER para continuar...");
+            input.nextLine();
+            return;
+        }
+    
+        char letra = assento.charAt(0);
+        int linha = letra - 'A';
+    
+        int coluna;
+        try {
+            coluna = Integer.parseInt(assento.substring(1)) - 1;
+        } catch (Exception e) {
+            System.out.println("Número do assento inválido!");
+            System.out.println("Pressione ENTER para continuar...");
+            input.nextLine();
+            return;
+        }
+    
+        if (linha < 0 || linha >= mapaAssentos.length || coluna < 0 || coluna >= mapaAssentos[0].length) {
+            System.out.println("Assento fora dos limites!");
+            System.out.println("Pressione ENTER para continuar...");
+            input.nextLine();
+            return;
+        }
+    
+        System.out.print("Informe a quantidade de assentos a liberar: ");
+        int quantidade = input.nextInt();
+        input.nextLine();
+    
+        if (coluna + quantidade > mapaAssentos[0].length) {
+            System.out.println("Não é possível liberar essa quantidade de assentos a partir do assento informado.");
+            System.out.println("Pressione ENTER para continuar...");
+            input.nextLine();
+            return;
+        }
+    
+        int liberados = 0;
+    
+        for (int j = coluna; j < coluna + quantidade; j++) {
+            if (mapaAssentos[linha][j] == 'X') {
+                mapaAssentos[linha][j] = '.';
+                sexoOcupantes[linha][j] = ' ';
+                idadeOcupantes[linha][j] = 0;
+                liberados++;
+            }
+        }
+    
+        System.out.println("Total de assentos liberados: " + liberados);
+        System.out.println("Pressione ENTER para continuar...");
+        input.nextLine();
+    }
+
     public static void visualizarMapa(char[][] mapaAssentos) {
         System.out.print("\033\143");
 
@@ -137,7 +198,7 @@ public class App {
 
                     break;
                 case 4:
-
+                liberarAssentos(mapaAssentos, sexoOcupantes, idadeOcupantes);
                     break;
                 case 5:
                     visualizarMapa(mapaAssentos);
