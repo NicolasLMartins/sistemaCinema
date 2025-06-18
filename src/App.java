@@ -1,4 +1,6 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Scanner;
 
 public class App {
@@ -333,7 +335,7 @@ public class App {
         for (int i = 0; i < mapaAssentos.length + 1; i++) {
             currentLine = i > 0 ? (char) asciiLetter++ : ' ';
             System.out.print(currentLine);
-            
+
             for (int j = 0; j < mapaAssentos[0].length; j++) {
                 if (i == 0) {
                     System.out.printf(" %02d", j + 1);
@@ -344,18 +346,106 @@ public class App {
             }
             System.out.println();
         }
-        
+
         System.out.println("Pressione ENTER para voltar ao menu...");
         input.nextLine();
     }
-    
+
+    public static void fileCreationHelper(File file, char[][] mapaAssentos, char[][] sexoOcupantes,
+            int[][] idadeOcupantes) {
+        try {
+            BufferedWriter buffer = new BufferedWriter(new FileWriter(file));
+
+            int asciiLetter = 65;
+
+            for (int i = 0; i < mapaAssentos.length + 1; i++) {
+
+                if (i == 0) {
+                    buffer.write("Assento,Sexo,Idade");
+                    buffer.newLine();
+                    continue;
+                }
+
+                char currentLine = (char) asciiLetter++;
+
+                for (int j = 0; j < mapaAssentos[0].length; j++) {
+                    if (mapaAssentos[i - 1][j] == 'X') {
+                        buffer.write(String.format("%c%d,%c,%d", currentLine, (j + 1),
+                                sexoOcupantes[i - 1][j], idadeOcupantes[i - 1][j]));
+                        buffer.newLine();
+                    }
+                }
+            }
+
+            buffer.close();
+            return;
+        } catch (Exception e) {
+            System.err.print("ERRO: " + e.getMessage());
+            System.out.println("Pressione ENTER para continuar...");
+            input.nextLine();
+            return;
+        }
+    }
+
+    public static void salvarDados(char[][] mapaAssentos, char[][] sexoOcupantes, int[][] idadeOcupantes) {
+        System.out.print("\033\143");
+
+        System.out.println("====== SALVAR DADOS ======");
+        System.out.print("Digite o nome do arquivo (sem extensão): ");
+        String nomeDoArquivo = input.nextLine();
+
+        File file = new File(nomeDoArquivo + ".txt");
+
+        if (file.exists()) {
+            System.out.print("\033\143");
+
+            System.out.println("====== SALVAR DADOS ======");
+            System.out.print("Arquivo ja existe, gostaria de sobrescrevê-lo (S/N)? ");
+            char option = input.next().charAt(0);
+
+            do {
+                switch (option) {
+                    case 'S':
+                        fileCreationHelper(file, mapaAssentos, sexoOcupantes, idadeOcupantes);
+
+                        return;
+
+                    case 'N':
+                        System.out.print("\033\143");
+
+                        System.out.println("====== SALVAR DADOS ======");
+
+                        System.out.println("Atualização de arquivo abortada.");
+                        System.out.println("Pressione ENTER para continuar...");
+                        input.nextLine(); // Limpa buffer
+                        input.nextLine();
+                        return;
+
+                    default:
+                        System.out.print("\033\143");
+
+                        System.out.println("====== SALVAR DADOS ======");
+                        System.out.println("Entrada inválida.");
+                        System.out.println("Pressione ENTER para continuar...");
+                        input.nextLine(); // Limpa buffer
+                        input.nextLine();
+                        return;
+                }
+            } while (option != 'S' && option != 'N');
+        } else {
+            fileCreationHelper(file, mapaAssentos, sexoOcupantes, idadeOcupantes);
+
+            return;
+        }
+    }
+
     public static void main(String[] args) {
         System.out.print("\033\143");
         double valorIngresso = 0;
         int fileiras = 0;
         int assentos = 0;
         int opcao;
-        
+
         System.out.println("====== INFORMAÇÕES DO CINEMA ======");
 
         System.out.print("Informe o valor do ingresso: ");
@@ -395,7 +485,7 @@ public class App {
             System.out.println("8. Integrantes");
             System.out.println("9. Sair");
             System.out.print("Escolha uma opção: ");
-            
+
             opcao = input.nextInt();
             input.nextLine();
 
@@ -421,7 +511,7 @@ public class App {
 
                     break;
                 case 7:
-
+                    salvarDados(mapaAssentos, sexoOcupantes, idadeOcupantes);
                     break;
                 case 8:
 
