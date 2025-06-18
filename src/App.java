@@ -214,7 +214,7 @@ public class App {
 
             System.out.println("====== RESERVA DE N ASSENTOS ======");
 
-            System.out.println("Qual o sexo da pessoa no assento " + letra + (j + 1) + " (F/M)?");
+            System.out.print("Qual o sexo da pessoa no assento " + letra + (j + 1) + " (F/M)? ");
             char sexo = input.next().charAt(0);
 
             if (sexo != 'F' && sexo != 'M') {
@@ -225,7 +225,7 @@ public class App {
                 return;
             }
 
-            System.out.println("Qual a idade da pessoa no assento " + letra + (j + 1) + "?");
+            System.out.print("Qual a idade da pessoa no assento " + letra + (j + 1) + "? ");
 
             int idade = input.nextInt();
 
@@ -333,7 +333,7 @@ public class App {
         for (int i = 0; i < mapaAssentos.length + 1; i++) {
             currentLine = i > 0 ? (char) asciiLetter++ : ' ';
             System.out.print(currentLine);
-
+            
             for (int j = 0; j < mapaAssentos[0].length; j++) {
                 if (i == 0) {
                     System.out.printf(" %02d", j + 1);
@@ -344,25 +344,27 @@ public class App {
             }
             System.out.println();
         }
-
+        
         System.out.println("Pressione ENTER para voltar ao menu...");
         input.nextLine();
     }
-
+    
     public static void main(String[] args) {
         System.out.print("\033\143");
         double valorIngresso = 0;
         int fileiras = 0;
         int assentos = 0;
         int opcao;
+        
+        System.out.println("====== INFORMAÇÕES DO CINEMA ======");
 
-        System.out.println("Informe o valor do ingresso: ");
+        System.out.print("Informe o valor do ingresso: ");
         valorIngresso = input.nextDouble();
 
-        System.out.println("Informe a quantidade de fileiras: ");
+        System.out.print("Informe a quantidade de fileiras: ");
         fileiras = input.nextInt();
 
-        System.out.println("Informe a quantidade de assentos por fileira: ");
+        System.out.print("Informe a quantidade de assentos por fileira: ");
         assentos = input.nextInt();
 
         char[][] mapaAssentos = new char[fileiras][assentos];
