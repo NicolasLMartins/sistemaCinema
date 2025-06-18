@@ -8,13 +8,19 @@ public class App {
             double[][] valorOcupantes, double valorIngresso) {
         System.out.print("\033\143");
 
-        System.out.println("Digite o nome do arquivo: ");
+        System.out.println("====== CARREGAR DADOS ======");
+        System.out.print("Digite o nome do arquivo: ");
         String nomeArquivo = input.nextLine();
 
         File arquivo = new File(nomeArquivo);
 
         if (!arquivo.exists()) {
+            System.out.print("\033\143");
+
+            System.out.println("====== CARREGAR DADOS ======");
             System.out.println("Arquivo nao encontrado!");
+            System.out.println("Pressione ENTER para continuar...");
+            input.nextLine();
             return;
         }
 
@@ -46,9 +52,15 @@ public class App {
             }
 
             leitor.close();
+            System.out.print("\033\143");
+
+            System.out.println("====== CARREGAR DADOS ======");
             System.out.println("Dados carregados!");
 
         } catch (Exception e) {
+            System.out.print("\033\143");
+
+            System.out.println("====== CARREGAR DADOS ======");
             System.out.println("Erro ao ler arquivo!");
         }
 
@@ -60,11 +72,15 @@ public class App {
             double[][] valorOcupantes, double valorIngresso) {
         System.out.print("\033\143");
 
-        System.out.println("===== CONSULTAR SITUAÇÃO DE UM ASSENTO =====");
+        System.out.println("====== CONSULTAR SITUAÇÃO DE UM ASSENTO ======");
         System.out.print("Informe o assento (ex: A1): ");
         String assento = input.nextLine().toUpperCase();
 
         if (assento.length() < 2) {
+            System.out.print("\033\143");
+
+            System.out.println("====== CONSULTAR SITUAÇÃO DE UM ASSENTO ======");
+
             System.out.println("Formato inválido!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -78,6 +94,9 @@ public class App {
         try {
             coluna = Integer.parseInt(assento.substring(1)) - 1;
         } catch (Exception e) {
+            System.out.print("\033\143");
+
+            System.out.println("====== CONSULTAR SITUAÇÃO DE UM ASSENTO ======");
             System.out.println("Número do assento inválido!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -85,6 +104,9 @@ public class App {
         }
 
         if (linha < 0 || linha >= mapaAssentos.length || coluna < 0 || coluna >= mapaAssentos[0].length) {
+            System.out.print("\033\143");
+
+            System.out.println("====== CONSULTAR SITUAÇÃO DE UM ASSENTO ======");
             System.out.println("Assento fora dos limites!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -92,8 +114,14 @@ public class App {
         }
 
         if (mapaAssentos[linha][coluna] == '.') {
+            System.out.print("\033\143");
+
+            System.out.println("====== CONSULTAR SITUAÇÃO DE UM ASSENTO ======");
             System.out.println("O assento " + assento + " está LIVRE.");
         } else {
+            System.out.print("\033\143");
+
+            System.out.println("====== CONSULTAR SITUAÇÃO DE UM ASSENTO ======");
             System.out.println("O assento " + assento + " está RESERVADO.");
             char sexo = sexoOcupantes[linha][coluna];
             int idade = idadeOcupantes[linha][coluna];
@@ -111,11 +139,14 @@ public class App {
             double[][] valorOcupantes, double valorIngresso) {
         System.out.print("\033\143");
 
-        System.out.println("===== RESERVA DE N ASSENTOS =====");
+        System.out.println("====== RESERVA DE N ASSENTOS ======");
         System.out.print("Informe o assento inicial (ex: C4): ");
         String assento = input.nextLine().toUpperCase();
 
         if (assento.length() < 2) {
+            System.out.print("\033\143");
+
+            System.out.println("====== RESERVA DE N ASSENTOS ======");
             System.out.println("Formato inválido!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -129,6 +160,9 @@ public class App {
         try {
             coluna = Integer.parseInt(assento.substring(1)) - 1;
         } catch (Exception e) {
+            System.out.print("\033\143");
+
+            System.out.println("====== RESERVA DE N ASSENTOS ======");
             System.out.println("Número do assento inválido!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -136,6 +170,9 @@ public class App {
         }
 
         if (linha < 0 || linha >= mapaAssentos.length || coluna < 0 || coluna >= mapaAssentos[0].length) {
+            System.out.print("\033\143");
+
+            System.out.println("====== RESERVA DE N ASSENTOS ======");
             System.out.println("Assento fora dos limites!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -147,7 +184,10 @@ public class App {
         input.nextLine();
 
         if (coluna + quantidade > mapaAssentos[0].length) {
-            System.out.println("Não é possível liberar essa quantidade de assentos a partir do assento informado.");
+            System.out.print("\033\143");
+
+            System.out.println("====== RESERVA DE N ASSENTOS ======");
+            System.out.println("Não é possível reservar essa quantidade de assentos a partir do assento informado.");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
             return;
@@ -157,6 +197,9 @@ public class App {
 
         for (int i = coluna; i < coluna + quantidade; i++) {
             if (mapaAssentos[linha][i] == 'X') {
+                System.out.print("\033\143");
+
+                System.out.println("====== RESERVA DE N ASSENTOS ======");
                 System.out.println("Sobreposição detectada, tente novamente com outros assentos...");
                 System.out.println("Pressione ENTER para continuar...");
                 input.nextLine();
@@ -169,7 +212,7 @@ public class App {
         for (int j = coluna; j < coluna + quantidade; j++) {
             System.out.print("\033\143");
 
-            System.out.println("===== RESERVA DE N ASSENTOS =====");
+            System.out.println("====== RESERVA DE N ASSENTOS ======");
 
             System.out.println("Qual o sexo da pessoa no assento " + letra + (j + 1) + " (F/M)?");
             char sexo = input.next().charAt(0);
@@ -193,7 +236,9 @@ public class App {
             valor += valorOcupantes[linha][j];
             reservados++;
         }
+        System.out.print("\033\143");
 
+        System.out.println("====== RESERVA DE N ASSENTOS ======");
         System.out.println("Total de assentos reservados: " + reservados);
         System.out.println("Total a pagar: R$ " + String.format("%.2f", valor));
         System.out.println("Pressione ENTER para continuar...");
@@ -205,11 +250,14 @@ public class App {
             double[][] valorOcupantes) {
         System.out.print("\033\143");
 
-        System.out.println("===== LIBERAR RESERVA DE N ASSENTOS =====");
+        System.out.println("====== LIBERAR RESERVA DE N ASSENTOS ======");
         System.out.print("Informe o assento inicial (ex: B3): ");
         String assento = input.nextLine().toUpperCase();
 
         if (assento.length() < 2) {
+            System.out.print("\033\143");
+
+            System.out.println("====== LIBERAR RESERVA DE N ASSENTOS ======");
             System.out.println("Formato inválido!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -223,6 +271,9 @@ public class App {
         try {
             coluna = Integer.parseInt(assento.substring(1)) - 1;
         } catch (Exception e) {
+            System.out.print("\033\143");
+
+            System.out.println("====== LIBERAR RESERVA DE N ASSENTOS ======");
             System.out.println("Número do assento inválido!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -230,6 +281,9 @@ public class App {
         }
 
         if (linha < 0 || linha >= mapaAssentos.length || coluna < 0 || coluna >= mapaAssentos[0].length) {
+            System.out.print("\033\143");
+
+            System.out.println("====== LIBERAR RESERVA DE N ASSENTOS ======");
             System.out.println("Assento fora dos limites!");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -241,6 +295,9 @@ public class App {
         input.nextLine();
 
         if (coluna + quantidade > mapaAssentos[0].length) {
+            System.out.print("\033\143");
+
+            System.out.println("====== LIBERAR RESERVA DE N ASSENTOS ======");
             System.out.println("Não é possível liberar essa quantidade de assentos a partir do assento informado.");
             System.out.println("Pressione ENTER para continuar...");
             input.nextLine();
@@ -258,7 +315,9 @@ public class App {
                 liberados++;
             }
         }
+        System.out.print("\033\143");
 
+        System.out.println("====== LIBERAR RESERVA DE N ASSENTOS ======");
         System.out.println("Total de assentos liberados: " + liberados);
         System.out.println("Pressione ENTER para continuar...");
         input.nextLine();
@@ -334,7 +393,7 @@ public class App {
             System.out.println("8. Integrantes");
             System.out.println("9. Sair");
             System.out.print("Escolha uma opção: ");
-
+            
             opcao = input.nextInt();
             input.nextLine();
 
@@ -370,6 +429,9 @@ public class App {
                     break;
 
                 default:
+                    System.out.println("Opção inválida, tente novamente.");
+                    System.out.println("Pressione ENTER para voltar ao menu...");
+                    input.nextLine();
                     break;
             }
         } while (opcao != 9);
